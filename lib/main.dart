@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_todo/models/todo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +30,7 @@ class ToDoListScreen extends StatefulWidget {
 }
 
 class ToDoListScreenState extends State<ToDoListScreen> {
-  List<String> todoItems = [];
+  List<ToDoItem> todoItems = [];
 
   @override
   Widget build(BuildContext context) {
@@ -41,17 +42,28 @@ class ToDoListScreenState extends State<ToDoListScreen> {
         itemCount: todoItems.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(todoItems[index]),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
+            title: Text(todoItems[index].title),
+            subtitle: Text(todoItems[index].description),
+            trailing: Checkbox(
+              value: todoItems[index].isCompleted,
+              onChanged: (value) {
                 setState(
                   () {
-                    todoItems.removeAt(index);
+                    todoItems[index].isCompleted = value!;
                   },
                 );
               },
             ),
+            // trailing: IconButton(
+            //   icon: const Icon(Icons.delete),
+            //   onPressed: () {
+            //     setState(
+            //       () {
+            //         todoItems.removeAt(index);
+            //       },
+            //     );
+            //   },
+            // ),
           );
         },
       ),
@@ -65,26 +77,45 @@ class ToDoListScreenState extends State<ToDoListScreen> {
   }
 
   void _addItemDialog(BuildContext context) {
-    String newItem = '';
+    String newTitle = '';
+    String newDescription = '';
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Add ToDo Item'),
-          content: TextField(
-            autofocus: true,
-            onChanged: (value) {
-              newItem = value;
-            },
-            decoration: const InputDecoration(
-              hintText: 'Enter new item',
-            ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                autofocus: true,
+                onChanged: (value) {
+                  newTitle = value;
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Title',
+                ),
+              ),
+              TextField(
+                onChanged: (value) {
+                  newDescription = value;
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Description',
+                ),
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 setState(() {
-                  if (newItem.isNotEmpty) {
+                  if (newTitle.isNotEmpty && newDescription.isNotEmpty) {
+                    ToDoItem newItem = ToDoItem(
+                      title: newTitle,
+                      description: newTitle,
+                    );
                     todoItems.add(newItem);
                   }
                   Navigator.of(context).pop();
