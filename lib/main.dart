@@ -114,10 +114,9 @@ class ToDoListScreenState extends State<ToDoListScreen> {
                   if (newTitle.isNotEmpty && newDescription.isNotEmpty) {
                     ToDoItem newItem = ToDoItem(
                       title: newTitle,
-                      description: newDescription,
+                      description: newTitle,
                     );
-                    // todoItems.add(newItem);
-                    newItem.addItem(newItem, todoItems);
+                    todoItems.add(newItem);
                   }
                   Navigator.of(context).pop();
                 });
