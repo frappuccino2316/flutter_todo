@@ -1,9 +1,11 @@
 class ToDoItem {
   String title;
+  String description;
   bool isCompleted;
 
   ToDoItem({
     required this.title,
+    required this.description,
     this.isCompleted = false,
   });
 
